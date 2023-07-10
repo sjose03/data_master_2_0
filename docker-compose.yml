@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  hadoop:
+    build: ./images/hadoop
+    container_name: hadoop
+    hostname: hadoop
+    ports:
+      - "8088:8088" # ResourceManager
+      - "9864:9864" # DataNode WebUI
+      - "9870:9870" # HDFS
