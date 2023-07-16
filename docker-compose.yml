@@ -16,7 +16,16 @@ services:
       - postgres
     networks:
       - data-master
-
+  superset:
+    build: ./images/superset
+    container_name: superset
+    hostname: superset
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - data-master
 
   postgres:
     image: postgres:12.1-alpine
@@ -45,6 +54,41 @@ services:
       - hadoop-hive
     networks:
       - data-master
+
+  apicurio:
+    image: apicurio/apicurio-registry-sql
+    container_name: apicurio
+    hostname: apicurio
+    ports:
+      - "8080:8085"
+    env_file:
+      - ./images/apicurio/confs.env
+    depends_on:
+      - postgres
+    networks:
+      - data-master
+  zookeeper:
+    image: confluentinc/cp-zookeeper:6.2.0
+    restart: always
+    container_name: zookeeper
+    networks: 
+      - data-master
+    env_file:
+      - ./images/kafka/zookeeper.env
+
+
+  kafka:
+    image: confluentinc/cp-kafka:6.2.0
+    restart: always
+    container_name: kafka
+    networks: 
+      - data-master
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+    env_file:
+      - ./images/kafka/kafka.env
 
 networks:
   data-master:
