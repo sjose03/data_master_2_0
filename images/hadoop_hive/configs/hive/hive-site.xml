@@ -8,7 +8,8 @@
 
   <property>
     <name>hive.server2.enable.doAs</name>
-  <value>false</value>
+    <value>false</value>
+  </property>
 
   <property>
     <name>javax.jdo.option.ConnectionDriverName</name>
