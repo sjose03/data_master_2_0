@@ -5,13 +5,14 @@ ENV HADOOP_VERSION 3.2.4
 ENV HADOOP_MINOR_VERSION 3.2
 ENV HADOOP_HOME /usr/hadoop-$HADOOP_VERSION
 ENV HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
-
-
 ENV PATH $PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin
+
+USER root
+
 
 # Ajustes e instalação dos componentes do hadoop
 RUN apt-get update \
-    && apt-get install -y wget vim ssh openssh-server curl iputils-ping \
+    && apt-get install -y wget vim ssh openssh-server curl sudo iputils-ping \
     python3 python3-pip python3-dev \
     build-essential libssl-dev libffi-dev libpq-dev \
     # Hadoop
@@ -38,7 +39,7 @@ COPY configs/scripts /
 
 # Portas 10000:10002 relativas ao Hiveserver2 
 # Portas 2181 2888 e 3888 relativas ao Zookeper, 9092 ao Kafka, 9999 webui do Hiveserver
-EXPOSE 9000 4040 8020 22 9083 10000
+EXPOSE 9000 4040 8020 22 9083 9870 10000 50070
 
 # Algumas configuracoes adicionais e inicio de alguns servicoes que devem ser feitos em
 # tempo de execucao estao presentes no script bootstrap.
