@@ -3,7 +3,7 @@
 <configuration>
         <property>
             <name>fs.default.name</name>
-            <value>hdfs://hadoop:9000</value>
+            <value>hdfs://hadoop-hive:9000</value>
         </property>
         <property>
             <name>hadoop.proxyuser.hue.groups</name>
