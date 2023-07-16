@@ -15,24 +15,25 @@ useradd -g sudo hue
 useradd -g sudo hive
 
 # Formatamos o namenode
-# hdfs namenode -format
+hdfs namenode -format
+
+# Iniciamos os serviços do hadoop
+$HADOOP_HOME/sbin/start-dfs.sh
+$HADOOP_HOME/sbin/start-yarn.sh
 
 # Iniciamos os serviços do hive
 schematool -dbType postgres -initSchema
-
-# Iniciamos os serviços do hadoop
-# $HADOOP_HOME/sbin/start-dfs.sh
-# $HADOOP_HOME/sbin/start-yarn.sh
-
-
-# hdfs dfs -mkdir /datasets
-# hdfs dfs -mkdir /datasets_processed
-# hdfs dfs -mkdir /user
-# hdfs dfs -mkdir /user/hue
-# hdfs dfs -mkdir /user/jose
-# # hdfs dfs -chown -R jose:root /user/jose
-# # hdfs dfs -chown -R hue:root /user/hue
-# hdfs dfsadmin -refreshUserToGroupsMappings
+hdfs dfs -mkdir /datasets
+hdfs dfs -mkdir /datasets_processed
+hdfs dfs -mkdir /user
+hdfs dfs -mkdir /user/hue
+hdfs dfs -mkdir /user/jose
+hdfs dfs -chown -R jose:root /user/jose
+hdfs dfs -chown -R hue:root /user/hue
+hdfs dfsadmin -refreshUserToGroupsMappings
+echo 'ligando o hive'
+nohup hive --service metastore > /dev/null 2>&1 &
+nohup hive --service hiveserver2 > /dev/null 2>&1 &
 
 
 while :; do sleep 2073600; done

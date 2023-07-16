@@ -18,7 +18,6 @@ USER root
 # Ajustes e instalação dos componentes do hadoop
 RUN apt-get update \
     && apt-get install -y wget vim ssh openssh-server curl sudo iputils-ping \
-    python3 python3-pip python3-dev \
     build-essential libssl-dev libffi-dev libpq-dev \
     # Hadoop
     && wget \
@@ -43,7 +42,11 @@ RUN apt-get update \
      # Criando diretório para jars externos do Hive e baixando suporte a parquet
     && wget https://repo1.maven.org/maven2/com/twitter/parquet-avro/1.2.5/parquet-avro-1.2.5.jar -P /usr/hive/aux_jars/ \
     # Configurando o JAVA_HOME para os processos localizarem a instalação do Java
-    && echo "export JAVA_HOME=${JAVA_HOME}" >> /etc/environment
+    && echo "export JAVA_HOME=${JAVA_HOME}" >> /etc/environment \
+    && rm ${HIVE_HOME}/lib/guava-19.0.jar \
+    && cp ${HADOOP_HOME}/share/hadoop/hdfs/lib/guava-27.0-jre.jar ${HIVE_HOME}/lib/
+
+
 
 # Keys dos nodes. Necessarias para se comunicarem por SSH
 RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa && \
