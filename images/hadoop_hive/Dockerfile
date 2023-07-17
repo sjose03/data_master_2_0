@@ -21,14 +21,14 @@ RUN apt-get update \
     build-essential libssl-dev libffi-dev libpq-dev \
     # Hadoop
     && wget \
-    "http://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz" \
+    "https://dlcdn.apache.org/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz" \
     && tar zvxf hadoop-${HADOOP_VERSION}.tar.gz -C /usr/ \
     && rm hadoop-${HADOOP_VERSION}.tar.gz \
     && rm -rf ${HADOOP_HOME}/share/doc \
     && chown -R root:root ${HADOOP_HOME} \
     # Hive
     && wget \
-    https://archive.apache.org/dist/hive/hive-${HIVE_VERSION}/apache-hive-${HIVE_VERSION}-bin.tar.gz \
+    https://dlcdn.apache.org/hive/hive-${HIVE_VERSION}/apache-hive-${HIVE_VERSION}-bin.tar.gz \
     && tar zxvf apache-hive-${HIVE_VERSION}-bin.tar.gz \
     && rm apache-hive-${HIVE_VERSION}-bin.tar.gz \
     && mv apache-hive-${HIVE_VERSION}-bin ${HIVE_HOME} \

@@ -1,12 +1,15 @@
 FROM openjdk:8-jdk-slim
 
+
+WORKDIR /usr
+
 # Variaveis de ambiente do Hadoop
 ENV HADOOP_MINOR_VERSION 3.2
 
 # Variaveis de ambiente do Spark
 ENV SPARK_VERSION 3.2.4
 ENV SPARK_HOME /usr/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_MINOR_VERSION}
-ENV HADOOP_CONF_DIR /usr/hadoop/etc/hadoop
+ENV HADOOP_CONF_DIR /usr/hadoop/etc/hadoop/
 #ENV SPARK_DIST_CLASSPATH="$HADOOP_HOME/etc/hadoop/*:$HADOOP_HOME/share/hadoop/common/lib/*:$HADOOP_HOME/share/hadoop/common/*:$HADOOP_HOME/share/hadoop/hdfs/*:$HADOOP_HOME/share/hadoop/hdfs/lib/*:$HADOOP_HOME/share/hadoop/hdfs/*:$HADOOP_HOME/share/hadoop/yarn/lib/*:$HADOOP_HOME/share/hadoop/yarn/*:$HADOOP_HOME/share/hadoop/mapreduce/lib/*:$HADOOP_HOME/share/hadoop/mapreduce/*:$HADOOP_HOME/share/hadoop/tools/lib/*"
 
 # Configuracoes do pyspark
@@ -16,11 +19,12 @@ ENV PYSPARK_PYTHON python3
 # para modo interativo
 ENV PYSPARK_DRIVER_PYTHON=python3
 
+ADD "https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_MINOR_VERSION}.tgz" .
 # Adicao de valores aos paths abaixo para que os componentes os localizem
 ENV PYTHONPATH $SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.7-src.zip:/usr/bin/python3
 ENV PATH $PATH:$JAVA_HOME/bin:$SPARK_HOME/bin:$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.7-src.zip:$PYTHONPATH
 
-COPY /configs/requirements.txt /
+COPY /configs/requirements.txt .
 
 # Ajustes e instalação dos componentes do cluster
 RUN apt-get update \
@@ -29,9 +33,7 @@ RUN apt-get update \
     build-essential libssl-dev libffi-dev libpq-dev \
     && python3 -m pip install -r requirements.txt \
     # Spark
-    && wget \
-    "http://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_MINOR_VERSION}.tgz" \
-    && tar zvxf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_MINOR_VERSION}.tgz -C ${SPARK_HOME} \
+    && tar zvxf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_MINOR_VERSION}.tgz \
     && rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_MINOR_VERSION}.tgz \
     && chown -R root:root ${SPARK_HOME} \
     # Cria home do diretorio de confs do hadoop
@@ -63,4 +65,4 @@ EXPOSE 8080
 # Zookeeper para que suas diferentes instâncias possam se ver e iniciando este servico.
 # O comando ENTRYPOINT define que este script será executado quando os containeres
 # iniciarem.
-ENTRYPOINT ["/bin/bash", "bootstrap.sh"]
+ENTRYPOINT ["/bin/bash", "/bootstrap.sh"]

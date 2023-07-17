@@ -6,6 +6,7 @@ services:
     hostname: hadoop-hive
     ports:
       - "8088:8088" # ResourceManager
+      - "8042:8042" # DataNode
       - "9864:9864" # DataNode WebUI
       - "9870:9870" # HDFS / WebHDFS
       - "8032:8032" # ResourceManager
@@ -24,6 +25,17 @@ services:
       - "8080:8080"
     depends_on:
       - postgres
+    networks:
+      - data-master
+
+  spark:
+    build: ./images/spark
+    container_name: spark
+    hostname: spark
+    # ports:
+    #   - "8080:8080"
+    depends_on:
+      - hadoop-hive
     networks:
       - data-master
 
@@ -56,17 +68,18 @@ services:
       - data-master
 
   apicurio:
-    image: apicurio/apicurio-registry-sql
+    image: apicurio/apicurio-registry-sql:2.4.3.Final
     container_name: apicurio
     hostname: apicurio
     ports:
-      - "8080:8085"
+      - "8085:8080"
     env_file:
       - ./images/apicurio/confs.env
     depends_on:
       - postgres
     networks:
       - data-master
+
   zookeeper:
     image: confluentinc/cp-zookeeper:6.2.0
     restart: always

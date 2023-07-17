@@ -30,4 +30,46 @@
     <name>datanucleus.schema.autoCreateAll</name>
     <value>true</value>
   </property>
+
+  <property>
+      <name>hive.metastore.uris</name>
+      <value>thrift://localhost:9083</value>
+      <description>IP address (or fully-qualified domain name) and port of the metastore host</description>
+  </property>
+
+  <property>
+      <name>hive.metastore.schema.verification</name>
+      <value>false</value>
+  </property>
+
+  <property>
+      <name>hive.aux.jars.path</name>
+      <value>/usr/hive/aux_jars</value>
+  </property>
+
+  <property>
+      <name>hive.server2.enable.doAs</name>
+      <value>false</value> 
+  </property>
+
+  <property>
+      <name>hive.server2.thrift.min.worker.threads</name>
+      <value>1</value> 
+  </property>
+
+  <property>
+      <name>hive.server2.thrift.max.worker.threads</name>
+      <value>500</value> 
+  </property>
+
+  <property>
+      <name>hive.server2.thrift.port</name>
+      <value>10000</value> 
+  </property>
+
+  <property>
+      <name>hive.server2.thrift.bind.host</name>
+      <value>localhost</value> 
+  </property>
+
 </configuration>
